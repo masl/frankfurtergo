@@ -6,21 +6,22 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-func (c *Client) jsonRequest() (err error) {
-	req := fasthttp.AcquireRequest()
-	defer fasthttp.ReleaseRequest(req)
+type Request struct {
+	Body string `json:"body"`
+}
 
-	res := fasthttp.AcquireResponse()
-	defer fasthttp.ReleaseResponse(res)
+func (c *Client) jsonRequest(method, host, path string, queries ...[]string) (body []byte, err error) {
 
-	req.Header.SetMethod("GET")
-	req.SetRequestURI("https://api.frankfurter.app/currencies")
-	req.Header.SetContentType("application/json")
+	uri := fmt.Sprintf("https://%v/%v", host, path)
 
-	if err = c.httpClient.Do(req, res); err != nil {
-		return
+	status, body, err := c.httpClient.Get(nil, uri)
+	if err != nil {
+		return nil, err
 	}
-	fmt.Println(req, res)
 
-	return
+	if status != fasthttp.StatusOK {
+		return nil, err
+	}
+
+	return body, err
 }

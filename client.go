@@ -1,11 +1,14 @@
 package frankfurtergo
 
 import (
+	"encoding/json"
+
 	"github.com/valyala/fasthttp"
 )
 
 type ClientOptions struct {
-	Endpoint string `json:"endpoint"`
+	Method string `json:"method"`
+	Host   string `json:"host"`
 }
 
 type Client struct {
@@ -16,12 +19,16 @@ type Client struct {
 func New(options ...ClientOptions) *Client {
 	var opt ClientOptions
 
-	if len(options) > 0 {
+	if len(options) == 1 {
 		opt = options[0]
 	}
 
-	if opt.Endpoint == "" {
-		opt.Endpoint = "GET"
+	if opt.Method == "" {
+		opt.Method = "GET"
+	}
+
+	if opt.Host == "" {
+		opt.Host = "api.frankfurter.app"
 	}
 
 	return &Client{
@@ -32,9 +39,17 @@ func New(options ...ClientOptions) *Client {
 	}
 }
 
-func (c *Client) FetchCurrencies() {
-	err := c.jsonRequest()
+func (c *Client) FetchCurrencies() (currencies map[string]string) {
+	body, err := c.jsonRequest(c.options.Method, c.options.Host, "currencies")
 	if err != nil {
 		panic(err)
 	}
+
+	currencies = map[string]string{}
+	err = json.Unmarshal([]byte(body), &currencies)
+	if err != nil {
+		panic(err)
+	}
+
+	return
 }
