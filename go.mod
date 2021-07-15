@@ -1,4 +1,4 @@
-module github.com/masl/frankfurterGo
+module github.com/masl/frankfurtergo
 
 go 1.16
 
