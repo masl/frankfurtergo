@@ -6,8 +6,7 @@ import (
 
 func TestClient(*testing.T) {
 	s := New(ClientOptions{
-		Method: "GET",
-		Host:   "api.frankfurter.app",
+		Host: "api.frankfurter.app",
 	})
 
 	s.FetchCurrencies()

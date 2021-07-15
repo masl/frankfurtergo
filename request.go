@@ -6,13 +6,9 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-type Request struct {
-	Body string `json:"body"`
-}
+func (c *Client) jsonRequest(path string, queries ...[]string) (body []byte, err error) {
 
-func (c *Client) jsonRequest(method, host, path string, queries ...[]string) (body []byte, err error) {
-
-	uri := fmt.Sprintf("https://%v/%v", host, path)
+	uri := fmt.Sprintf("https://%v/%v", c.options.Host, path)
 
 	status, body, err := c.httpClient.Get(nil, uri)
 	if err != nil {

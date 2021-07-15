@@ -7,8 +7,7 @@ import (
 )
 
 type ClientOptions struct {
-	Method string `json:"method"`
-	Host   string `json:"host"`
+	Host string `json:"host"`
 }
 
 type Client struct {
@@ -21,10 +20,6 @@ func New(options ...ClientOptions) *Client {
 
 	if len(options) == 1 {
 		opt = options[0]
-	}
-
-	if opt.Method == "" {
-		opt.Method = "GET"
 	}
 
 	if opt.Host == "" {
@@ -40,7 +35,7 @@ func New(options ...ClientOptions) *Client {
 }
 
 func (c *Client) FetchCurrencies() (currencies map[string]string) {
-	body, err := c.jsonRequest(c.options.Method, c.options.Host, "currencies")
+	body, err := c.jsonRequest("currencies")
 	if err != nil {
 		panic(err)
 	}
