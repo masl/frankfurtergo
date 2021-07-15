@@ -9,8 +9,8 @@ type ClientOptions struct {
 }
 
 type Client struct {
-	options *ClientOptions
-	client  *fasthttp.Client
+	options    *ClientOptions
+	httpClient *fasthttp.Client
 }
 
 func New(options ...ClientOptions) *Client {
@@ -26,8 +26,8 @@ func New(options ...ClientOptions) *Client {
 
 	return &Client{
 		options: &opt,
-		client: &fasthttp.Client{
-			Name: "frankfurterGo",
+		httpClient: &fasthttp.Client{
+			Name: "frankfurtergo",
 		},
 	}
 }

@@ -17,7 +17,7 @@ func (c *Client) jsonRequest() (err error) {
 	req.SetRequestURI("https://api.frankfurter.app/currencies")
 	req.Header.SetContentType("application/json")
 
-	if err = c.client.Do(req, res); err != nil {
+	if err = c.httpClient.Do(req, res); err != nil {
 		return
 	}
 	fmt.Println(req, res)
