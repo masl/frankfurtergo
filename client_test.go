@@ -10,4 +10,5 @@ func TestClient(*testing.T) {
 	})
 
 	s.FetchCurrencies()
+	s.FetchLatest()
 }

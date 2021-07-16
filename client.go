@@ -34,6 +34,21 @@ func New(options ...ClientOptions) *Client {
 	}
 }
 
+func (c *Client) FetchLatest() (latest *Latest, err error) {
+	latest = &Latest{}
+	body, err := c.jsonRequest("latest")
+	if err != nil {
+		return latest, err
+	}
+
+	err = json.Unmarshal(body, &latest)
+	if err != nil {
+		return latest, err
+	}
+
+	return
+}
+
 func (c *Client) FetchCurrencies() (currencies map[string]string, err error) {
 	body, err := c.jsonRequest("currencies")
 	if err != nil {
