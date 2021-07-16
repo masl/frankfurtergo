@@ -7,10 +7,10 @@ import (
 )
 
 type Latest struct {
-	Amount float32           `json:"amount"`
-	Base   string            `json:"base"`
-	Date   Date              `json:"date"`
-	Rates  map[string]string `json:"string"`
+	Amount float32            `json:"amount"`
+	Base   string             `json:"base"`
+	Date   Date               `json:"date"`
+	Rates  map[string]float64 `json:"rates"`
 }
 
 type Date struct {
