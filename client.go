@@ -34,16 +34,16 @@ func New(options ...ClientOptions) *Client {
 	}
 }
 
-func (c *Client) FetchCurrencies() (currencies map[string]string) {
+func (c *Client) FetchCurrencies() (currencies map[string]string, err error) {
 	body, err := c.jsonRequest("currencies")
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	currencies = map[string]string{}
 	err = json.Unmarshal([]byte(body), &currencies)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	return
