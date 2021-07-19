@@ -1,16 +1,20 @@
 package frankfurtergo
 
 import (
-	"fmt"
+	"net/url"
 
 	"github.com/valyala/fasthttp"
 )
 
 func (c *Client) jsonRequest(path string, queries ...[]string) (body []byte, err error) {
 
-	uri := fmt.Sprintf("https://%v/%v", c.options.Host, path)
+	uri := url.URL{
+		Scheme: "https",
+		Host:   c.options.Host,
+		Path:   path,
+	}
 
-	status, body, err := c.httpClient.Get(nil, uri)
+	status, body, err := c.httpClient.Get(nil, uri.String())
 	if err != nil {
 		return nil, err
 	}
