@@ -15,20 +15,22 @@ type RequestOptions struct {
 }
 
 func (c *Client) jsonRequest(path string, options ...RequestOptions) (body []byte, err error) {
-	opt := options[0]
 	uri := url.URL{
 		Scheme: "https",
 		Host:   c.options.Host,
 		Path:   path,
 	}
 
-	queryValues := url.Values{}
-	queryValues.Add("from", opt.From)
-	if len(opt.To) > 0 {
-		queryValues.Add("to", strings.Join(opt.To, ","))
+	if len(options) > 0 {
+		opt := options[0]
+		queryValues := url.Values{}
+		queryValues.Add("from", opt.From)
+		if len(opt.To) > 0 {
+			queryValues.Add("to", strings.Join(opt.To, ","))
+		}
+		queryValues.Add("amount", strconv.Itoa(opt.Amount))
+		uri.RawQuery = queryValues.Encode()
 	}
-	queryValues.Add("amount", strconv.Itoa(opt.Amount))
-	uri.RawQuery = queryValues.Encode()
 
 	status, body, err := c.httpClient.Get(nil, uri.String())
 	if err != nil {
