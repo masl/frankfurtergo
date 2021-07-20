@@ -34,9 +34,12 @@ func New(options ...ClientOptions) *Client {
 	}
 }
 
-func (c *Client) FetchLatest() (latest *Latest, err error) {
+func (c *Client) FetchLatest(options ...RequestOptions) (latest *Latest, err error) {
 	latest = &Latest{}
-	body, err := c.jsonRequest("latest")
+
+	opt := defaultRequestOptions(options)
+
+	body, err := c.jsonRequest("latest", opt)
 	if err != nil {
 		return latest, err
 	}

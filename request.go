@@ -1,29 +1,35 @@
 package frankfurtergo
 
 import (
-	"fmt"
 	"net/url"
+	"strconv"
+	"strings"
 
 	"github.com/valyala/fasthttp"
 )
 
-func (c *Client) jsonRequest(path string, queries ...map[string]string) (body []byte, err error) {
+type RequestOptions struct {
+	From   string   `json:"from"`
+	To     []string `json:"to"`
+	Amount int      `json:"amount"`
+}
 
+func (c *Client) jsonRequest(path string, options ...RequestOptions) (body []byte, err error) {
+	opt := options[0]
 	uri := url.URL{
 		Scheme: "https",
 		Host:   c.options.Host,
 		Path:   path,
 	}
 
-	if len(queries) > 0 {
-		queryValues := url.Values{}
-		for k, v := range queries[0] {
-			queryValues.Add(k, v)
-		}
-		uri.RawQuery = queryValues.Encode()
+	queryValues := url.Values{}
+	queryValues.Add("from", opt.From)
+	if len(opt.To) > 0 {
+		queryValues.Add("to", strings.Join(opt.To, ","))
 	}
+	queryValues.Add("amount", strconv.Itoa(opt.Amount))
+	uri.RawQuery = queryValues.Encode()
 
-	fmt.Println(uri.String())
 	status, body, err := c.httpClient.Get(nil, uri.String())
 	if err != nil {
 		return nil, err
@@ -34,4 +40,24 @@ func (c *Client) jsonRequest(path string, queries ...map[string]string) (body []
 	}
 
 	return body, err
+}
+
+func defaultRequestOptions(options []RequestOptions) (opt RequestOptions) {
+	if len(options) > 0 {
+		opt = options[0]
+	}
+
+	if opt.From == "" {
+		opt.From = "EUR"
+	}
+
+	if len(opt.To) == 0 {
+		opt.To = make([]string, 0)
+	}
+
+	if opt.Amount <= 0 {
+		opt.Amount = 1
+	}
+
+	return
 }
