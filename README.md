@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/masl/frankfurtergo)](https://goreportcard.com/report/github.com/masl/frankfurtergo)
+
 # frankfurtergo
 A neat Go wrapper for the [frankfurter.app](https://www.frankfurter.app/docs/) API
 
