@@ -2,6 +2,8 @@ package frankfurtergo
 
 import (
 	"encoding/json"
+	"fmt"
+	"time"
 
 	"github.com/valyala/fasthttp"
 )
@@ -32,6 +34,25 @@ func New(options ...ClientOptions) *Client {
 			Name: "frankfurtergo",
 		},
 	}
+}
+
+func (c *Client) FetchHistorical(d time.Time, options ...RequestOptions) (historical *Historical, err error) {
+	historical = &Historical{}
+	t := fmt.Sprintf("%02d-%02d-%02d", d.Year(), int(d.Month()), d.Day())
+
+	opt := defaultRequestOptions(options)
+
+	body, err := c.jsonRequest(t, opt)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(body, &historical)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 func (c *Client) FetchLatest(options ...RequestOptions) (latest *Latest, err error) {
