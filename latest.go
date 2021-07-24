@@ -19,11 +19,11 @@ type Date struct {
 	Day   int `json:"day"`
 }
 
-func (d *Date) UnmarshalJSON(data []byte) error {
+func (d *Date) UnmarshalJSON(data []byte) (err error) {
 	currencies := new(string)
-	err := json.Unmarshal([]byte(data), &currencies)
+	err = json.Unmarshal([]byte(data), &currencies)
 	if err != nil {
-		return err
+		return
 	}
 
 	dateP := strings.Split(*currencies, "-")
@@ -32,5 +32,5 @@ func (d *Date) UnmarshalJSON(data []byte) error {
 	d.Month, _ = strconv.Atoi(dateP[1])
 	d.Day, _ = strconv.Atoi(dateP[2])
 
-	return nil
+	return
 }

@@ -1,6 +1,7 @@
 package frankfurtergo
 
 import (
+	"errors"
 	"net/url"
 	"strconv"
 	"strings"
@@ -34,14 +35,14 @@ func (c *Client) jsonRequest(path string, options ...RequestOptions) (body []byt
 
 	status, body, err := c.httpClient.Get(nil, uri.String())
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	if status != fasthttp.StatusOK {
-		return nil, err
+		return nil, errors.New(strconv.Itoa(status))
 	}
 
-	return body, err
+	return
 }
 
 func defaultRequestOptions(options []RequestOptions) (opt RequestOptions) {

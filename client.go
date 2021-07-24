@@ -38,10 +38,10 @@ func New(options ...ClientOptions) *Client {
 
 func (c *Client) FetchHistorical(d time.Time, options ...RequestOptions) (historical *Historical, err error) {
 	historical = &Historical{}
-	t := fmt.Sprintf("%02d-%02d-%02d", d.Year(), int(d.Month()), d.Day())
 
 	opt := defaultRequestOptions(options)
 
+	t := fmt.Sprintf("%02d-%02d-%02d", d.Year(), int(d.Month()), d.Day())
 	body, err := c.jsonRequest(t, opt)
 	if err != nil {
 		return
@@ -62,27 +62,28 @@ func (c *Client) FetchLatest(options ...RequestOptions) (latest *Latest, err err
 
 	body, err := c.jsonRequest("latest", opt)
 	if err != nil {
-		return latest, err
+		return
 	}
 
 	err = json.Unmarshal(body, &latest)
 	if err != nil {
-		return latest, err
+		return
 	}
 
 	return
 }
 
 func (c *Client) FetchCurrencies() (currencies map[string]string, err error) {
+	currencies = map[string]string{}
+
 	body, err := c.jsonRequest("currencies")
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	currencies = map[string]string{}
 	err = json.Unmarshal([]byte(body), &currencies)
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	return
