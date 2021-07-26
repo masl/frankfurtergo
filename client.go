@@ -36,6 +36,19 @@ func New(options ...ClientOptions) *Client {
 	}
 }
 
+func (c *Client) ConvertCurrency(from, to string, amount float64) (latest *Latest, err error) {
+	latest, err = c.FetchLatest(RequestOptions{
+		From:   from,
+		To:     []string{to},
+		Amount: amount,
+	})
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 func (c *Client) FetchSeries(from time.Time, to time.Time, options ...RequestOptions) (series *Series, err error) {
 	series = &Series{}
 
