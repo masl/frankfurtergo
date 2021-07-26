@@ -2,6 +2,7 @@ package frankfurtergo
 
 import (
 	"errors"
+	"fmt"
 	"net/url"
 	"strconv"
 	"strings"
@@ -12,7 +13,7 @@ import (
 type RequestOptions struct {
 	From   string   `json:"from"`
 	To     []string `json:"to"`
-	Amount int      `json:"amount"`
+	Amount float64  `json:"amount"`
 }
 
 func (c *Client) jsonRequest(path string, options ...RequestOptions) (body []byte, err error) {
@@ -29,7 +30,7 @@ func (c *Client) jsonRequest(path string, options ...RequestOptions) (body []byt
 		if len(opt.To) > 0 {
 			queryValues.Add("to", strings.Join(opt.To, ","))
 		}
-		queryValues.Add("amount", strconv.Itoa(opt.Amount))
+		queryValues.Add("amount", fmt.Sprintf("%.2f", opt.Amount))
 		uri.RawQuery = queryValues.Encode()
 	}
 
