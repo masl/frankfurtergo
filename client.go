@@ -36,6 +36,26 @@ func New(options ...ClientOptions) *Client {
 	}
 }
 
+func (c *Client) FetchSeries(from time.Time, to time.Time, options ...RequestOptions) (series *Series, err error) {
+	series = &Series{}
+
+	opt := defaultRequestOptions(options)
+
+	f := fmt.Sprintf("%02d-%02d-%02d", from.Year(), int(from.Month()), from.Day())
+	t := fmt.Sprintf("%02d-%02d-%02d", to.Year(), int(to.Month()), to.Day())
+	body, err := c.jsonRequest(fmt.Sprintf("%s..%s", f, t), opt)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(body, &series)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 func (c *Client) FetchHistorical(d time.Time, options ...RequestOptions) (historical *Historical, err error) {
 	historical = &Historical{}
 
