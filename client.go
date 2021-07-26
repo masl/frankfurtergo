@@ -56,6 +56,9 @@ func (c *Client) FetchSeries(from time.Time, to time.Time, options ...RequestOpt
 
 	f := fmt.Sprintf("%02d-%02d-%02d", from.Year(), int(from.Month()), from.Day())
 	t := fmt.Sprintf("%02d-%02d-%02d", to.Year(), int(to.Month()), to.Day())
+	if to.Before(from) {
+		t = ""
+	}
 	body, err := c.jsonRequest(fmt.Sprintf("%s..%s", f, t), opt)
 	if err != nil {
 		return
