@@ -5,7 +5,9 @@
 A neat Go wrapper for the [frankfurter.app](https://www.frankfurter.app/docs/) API
 
 ## Installation
-`go get github.com/masl/frankfurtergo`
+```bash
+go get -u github.com/masl/frankfurtergo
+```
 
 ## Usage
 
