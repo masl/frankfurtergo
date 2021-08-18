@@ -8,8 +8,43 @@ A neat Go wrapper for the [frankfurter.app](https://www.frankfurter.app/docs/) A
 `go get github.com/masl/frankfurtergo`
 
 ## Usage
+
+### Intialize
 ```go
 client := frankfurtergo.New()
+```
+
+### Latest Data
+```go
+latest, err := client.FetchLatest()
+if err != nil {
+    return err
+}
+```
+
+### Historical Data
+```go
+t := time.Date(
+    2010, 8, 18, 16, 0, 0, 0, time.UTC)
+
+hist, err := client.FetchHistorical(t)
+if err != nil {
+    return err
+}
+```
+
+### Time Series Data
+```go
+f := time.Date(
+    2010, 8, 18, 16, 0, 0, 0, time.UTC)
+
+t := time.Date(
+    2012, 4, 20, 16, 0, 0, 0, time.UTC)
+
+series, err := client.FetchSeries(f, t)
+if err != nil {
+    return err
+}
 ```
 
 ## Contribution
