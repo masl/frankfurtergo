@@ -11,7 +11,7 @@ go get -u github.com/masl/frankfurtergo
 
 ## Usage
 
-### Intialize
+### Initialize
 ```go
 client := frankfurtergo.New()
 ```
