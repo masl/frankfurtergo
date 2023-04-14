@@ -3,11 +3,11 @@ package frankfurtergo
 import (
 	"errors"
 	"fmt"
+	"io"
+	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
-
-	"github.com/valyala/fasthttp"
 )
 
 type RequestOptions struct {
@@ -34,13 +34,15 @@ func (c *Client) jsonRequest(path string, options ...RequestOptions) (body []byt
 		uri.RawQuery = queryValues.Encode()
 	}
 
-	status, body, err := c.httpClient.Get(nil, uri.String())
+	resp, err := c.httpClient.Get(uri.String())
 	if err != nil {
 		return
 	}
+	defer resp.Body.Close()
+	body, err = io.ReadAll(resp.Body)
 
-	if status != fasthttp.StatusOK {
-		return nil, errors.New(strconv.Itoa(status))
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New(strconv.Itoa(resp.StatusCode))
 	}
 
 	return

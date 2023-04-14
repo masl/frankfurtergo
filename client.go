@@ -3,9 +3,8 @@ package frankfurtergo
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
-
-	"github.com/valyala/fasthttp"
 )
 
 type ClientOptions struct {
@@ -14,7 +13,7 @@ type ClientOptions struct {
 
 type Client struct {
 	options    *ClientOptions
-	httpClient *fasthttp.Client
+	httpClient *http.Client
 }
 
 func New(options ...ClientOptions) *Client {
@@ -29,10 +28,8 @@ func New(options ...ClientOptions) *Client {
 	}
 
 	return &Client{
-		options: &opt,
-		httpClient: &fasthttp.Client{
-			Name: "frankfurtergo",
-		},
+		options:    &opt,
+		httpClient: &http.Client{},
 	}
 }
 
